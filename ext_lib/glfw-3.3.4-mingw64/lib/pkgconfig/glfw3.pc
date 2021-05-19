@@ -1,0 +1,13 @@
+prefix=E:\libs\glfw-3.3.4-installed
+exec_prefix=${prefix}
+includedir=E:\libs\glfw-3.3.4-installed/include
+libdir=E:\libs\glfw-3.3.4-installed/lib
+
+Name: GLFW
+Description: A multi-platform library for OpenGL, window and input
+Version: 3.3.4
+URL: https://www.glfw.org/
+Requires.private: 
+Libs: -L${libdir} -lglfw3
+Libs.private:  -lgdi32
+Cflags: -I${includedir}
