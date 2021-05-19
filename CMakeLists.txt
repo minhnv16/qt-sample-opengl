@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
+set(out_target sample-console)
 
-project(qt-sample-console LANGUAGES CXX)
+project(${out_target} LANGUAGES CXX)
 
 
 
@@ -51,15 +52,15 @@ if (WIN32)
     include_directories("${glew_pre_built_dir}/include")
 
 
-    add_library(lib_glew SHARED IMPORTED)
+    add_library(lib_glew STATIC IMPORTED)
     set_target_properties( lib_glew
-            PROPERTIES  IMPORTED_IMPLIB
+            PROPERTIES  IMPORTED_LOCATION
             ${glew_pre_built_dir}/lib/libglew32.dll.a)
 
 
-    add_library(lib_glfw SHARED IMPORTED)
+    add_library(lib_glfw STATIC IMPORTED)
     set_target_properties( lib_glfw
-            PROPERTIES  IMPORTED_IMPLIB
+            PROPERTIES  IMPORTED_LOCATION
             ${glfw_pre_built_dir}/lib/libglfw3.a)
     find_package(OpenGL REQUIRED)
 
@@ -69,7 +70,7 @@ endif (WIN32)
 
 
 add_executable(
-    qt-sample-console
+    ${out_target}
     main.cpp
     WindowCreator.cpp
     WindowCreator.h
@@ -82,7 +83,7 @@ if (WIN32)
 
 
 target_link_libraries(
-    qt-sample-console
+    ${out_target}
     lib_glew
     lib_glfw
     ${OPENGL_LIBRARY}
@@ -92,7 +93,7 @@ endif (WIN32)
 
 if (UNIX)
 target_link_libraries(
-    qt-sample-console
+    ${out_target}
     lib_glew
     lib_glfw
     ${X11_LIBRARIES}
