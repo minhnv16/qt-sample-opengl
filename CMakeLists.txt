@@ -28,17 +28,14 @@ if (UNIX)
             PROPERTIES IMPORTED_LOCATION
             ${glfw_pre_built_dir}/lib/libglfw3.a)
 
-    add_library(lib_glew SHARED IMPORTED)
+    add_library(lib_glew STATIC IMPORTED)
     set_target_properties( lib_glew
             PROPERTIES IMPORTED_LOCATION
             ${glew_pre_built_dir}/lib/libGLEW.a)
 
     find_package(OpenGL REQUIRED)
-
     find_package(X11 REQUIRED)
-    find_package (Threads REQUIRED)
-    #find_package(GL REQUIRED)
-    find_package(GLU REQUIRED)
+    find_package(Threads REQUIRED)
     find_package(GLUT REQUIRED)
 
 
