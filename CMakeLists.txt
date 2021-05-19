@@ -24,12 +24,12 @@ if (UNIX)
 
     add_library(lib_glfw SHARED IMPORTED)
     set_target_properties( lib_glfw
-            PROPERTIES IMPORTED_IMPLIB
+            PROPERTIES IMPORTED_LOCATION
             ${glfw_pre_built_dir}/lib/libglfw3.a)
 
     add_library(lib_glew SHARED IMPORTED)
     set_target_properties( lib_glew
-            PROPERTIES IMPORTED_IMPLIB
+            PROPERTIES IMPORTED_LOCATION
             ${glew_pre_built_dir}/lib/libGLEW.a)
 
 
@@ -51,21 +51,31 @@ if (WIN32)
             PROPERTIES  IMPORTED_IMPLIB
             ${glew_pre_built_dir}/lib/libglew32.dll.a)
 
+
     add_library(lib_glfw SHARED IMPORTED)
     set_target_properties( lib_glfw
             PROPERTIES  IMPORTED_IMPLIB
             ${glfw_pre_built_dir}/lib/libglfw3.a)
 
-
-
 endif (WIN32)
 
 
-add_executable(qt-sample-console  main.cpp WindowCreator.cpp WindowCreator.h)
+find_package(OpenGL REQUIRED)
+
+
+add_executable(
+    qt-sample-console
+    main.cpp
+    WindowCreator.cpp
+    WindowCreator.h
+    Source2_sample_drawing_triangle_index.cpp
+    Learn6.cpp
+    Learn6_transform.cpp
+    )
 
 target_link_libraries(
                       qt-sample-console
                       lib_glew
                       lib_glfw
-
+                      ${OPENGL_LIBRARY}
                      )
