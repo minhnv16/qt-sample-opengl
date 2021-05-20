@@ -1,3 +1,0 @@
-[submodule "ext_src/glew"]
-	path = ext_src/glew
-	url = https://github.com/nigels-com/glew.git
