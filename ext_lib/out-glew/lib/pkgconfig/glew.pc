@@ -1,0 +1,11 @@
+prefix=/mnt/sdb1/git-repo/qt-sample-opengl/ext_lib/glew-2.1.0/build/cmake/../../../out-glew
+exec_prefix=${prefix}
+libdir=/mnt/sdb1/git-repo/qt-sample-opengl/ext_lib/glew-2.1.0/build/cmake/../../../out-glew/lib
+includedir=${prefix}/include
+
+Name: glew
+Description: The OpenGL Extension Wrangler library
+Version: 2.1.0
+Cflags: -I${includedir} 
+Libs: -L${libdir} -lGLEW
+Requires: glu
