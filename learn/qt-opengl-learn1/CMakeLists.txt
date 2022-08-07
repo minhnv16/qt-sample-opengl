@@ -1,29 +1,30 @@
 cmake_minimum_required(VERSION 3.5)
-set(out_target qt-sample-opengl)
+set(out_target qt-opengl-learn1)
 project(${out_target} LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 11)
+
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
+
 if (UNIX)
-    set(glfw_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/ext_lib/out-glfw")
-    set(glew_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/ext_lib/out-glew")
+    set(glfw_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../ext_lib/out-glfw")
+    set(glew_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../ext_lib/out-glew")
     set(libglfw_path "lib/libglfw3.a")
     set(libglew_path "lib/libGLEW.a")
 elseif (WIN32)
     if(MSVC)
-        set(glfw_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/ext_lib/glfw-3.3.4-v142")
-        set(glew_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/ext_lib/glew-2.2.0-v142")
+        set(glfw_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../ext_lib/glfw-3.3.4-v142")
+        set(glew_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../ext_lib/glew-2.2.0-v142")
         set(libglfw_path "x64/Release/glfw3.lib")
         set(libglew_path "x64/Release/glew32.lib")
     else()
-        set(glfw_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/ext_lib/glfw-3.3.4-mingw64")
-        set(glew_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/ext_lib/glew-2.2.0-mingw64")
+        set(glfw_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../ext_lib/glfw-3.3.4-mingw64")
+        set(glew_pre_built_dir "${CMAKE_CURRENT_SOURCE_DIR}/../../ext_lib/glew-2.2.0-mingw64")
         set(libglfw_path "lib/libglfw3.a")
         set(libglew_path "lib/libglew32.dll.a")
     endif (MSVC)
 endif (UNIX)
-
-
 
 
 include_directories("${glfw_pre_built_dir}/include")
@@ -39,7 +40,6 @@ set_target_properties( lib_glew
         PROPERTIES IMPORTED_LOCATION
         ${glew_pre_built_dir}/${libglew_path})
 
-
 find_package(OpenGL REQUIRED)
 if (UNIX)
     find_package(X11 REQUIRED)
@@ -50,19 +50,9 @@ endif (UNIX)
 
 
 
-add_executable(
-    ${out_target}
-    main.cpp
-    WindowCreator.cpp
-    WindowCreator.h
-    Source2_sample_drawing_triangle_index.cpp
-    Learn6.cpp
-    Learn6_transform.cpp
-    )
+add_executable(${out_target} main.cpp)
 
 if (WIN32)
-
-
 target_link_libraries(
     ${out_target}
     lib_glew
@@ -86,3 +76,8 @@ target_link_libraries(
     ${GLUT_LIBRARIES}
 )
 endif (UNIX)
+
+
+
+install(TARGETS qt-opengl-learn1
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
