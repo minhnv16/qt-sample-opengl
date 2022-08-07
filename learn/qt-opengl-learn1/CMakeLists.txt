@@ -50,7 +50,12 @@ endif (UNIX)
 
 
 
-add_executable(${out_target} main.cpp)
+add_executable(${out_target}
+    main.cpp
+    main_l1.cpp
+    main_l1_ex_indices.cpp
+    main_l1_ex2_2program.cpp
+    main_l1_ex2_2program.sample.cpp)
 
 if (WIN32)
 target_link_libraries(
