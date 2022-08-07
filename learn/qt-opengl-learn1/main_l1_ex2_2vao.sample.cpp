@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
-namespace l1_ex2_2program{
+namespace l1_ex2_2vao_2vbo{
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
