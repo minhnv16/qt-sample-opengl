@@ -30,8 +30,24 @@ int main(){
 
     GlRender re(window);
     re.initGL();
+
+    double lastTime = glfwGetTime();
+    int nbFrames = 0;
+    glfwSwapInterval(0);
+
     while (!glfwWindowShouldClose(window))
     {
+        double currentTime = glfwGetTime();
+        nbFrames++;
+        if (currentTime - lastTime >= 1.0) { // If last prinf() was more than 1 sec ago
+            // printf and reset timer
+            printf("%f ms/frame\n", 1000.0 / double(nbFrames));
+            printf("fps=%d\n", nbFrames);
+
+            nbFrames = 0;
+            lastTime = currentTime;
+        }
+
         re.drawingGL();
     }
     return 0;

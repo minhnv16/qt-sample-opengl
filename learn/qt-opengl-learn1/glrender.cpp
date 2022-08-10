@@ -1,19 +1,71 @@
 #include "glrender.h"
-
+#include <math.h>
 
 
 
 GlRender::GlRender(GLFWwindow *window)
 {
     m_window = window;
-    vertices.push_back(VertexAtt(Position(-0.5f, -0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f)));
-    vertices.push_back(VertexAtt(Position(+0.5f, -0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f)));
-    vertices.push_back(VertexAtt(Position(+0.0f, +0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f)));
+    initVertex2();
+}
 
-    vertices.push_back(VertexAtt(Position(+0.8f, +0.8f, 0.0f), Color(1.0f, 0.0f, 0.0f)));
-    vertices.push_back(VertexAtt(Position(+0.8f, +0.9f, 0.0f), Color(0.0f, 1.0f, 0.0f)));
-    vertices.push_back(VertexAtt(Position(+0.7f, +0.9f, 0.0f), Color(0.0f, 0.0f, 1.0f)));
+int GlRender::initVertex1()
+{
+    int nNum = 12;
+    for(int i=0;i<nNum;i++){
+        VertexAtt pt1(Position(0.0f, 0.0f, 0.0f), Color(1.0f, 0.0f, 0.0f));
+        VertexAtt pt2(Position(+1.0f, 0.0f, 0.0f), Color(0.0f, 1.0f, 0.0f));
+        VertexAtt pt3(Position(+0.5f, +1.0f, 0.0f), Color(0.0f, 0.0f, 1.0f));
 
+        pt1.multi(2.0f/nNum);
+        pt2.multi(2.0f/nNum);
+        pt3.multi(2.0f/nNum);
+
+
+        float bottomWidth = 2.0f/nNum;
+
+        pt1.move_left(1 - 2.0f/nNum*i);
+        pt2.move_left(1 - 2.0f/nNum*i);
+        pt3.move_left(1 - 2.0f/nNum*i);
+
+        vertices.push_back(pt1);
+        vertices.push_back(pt2);
+        vertices.push_back(pt3);
+
+        printf("");
+    }
+    return 0;
+}
+int GlRender::initVertex2()
+{
+    int numOfTriangleBottom = 50;
+    float width = 2.0f/numOfTriangleBottom;
+    float height = width;
+
+
+    for(int i=0;i<numOfTriangleBottom;i++){
+        int numOfTriangThisLine = numOfTriangleBottom - i;
+
+        float fBottom = -1.0f+i*height;
+        float fTop = fBottom + height;
+
+        for(int j=0;j<numOfTriangThisLine;j++){
+
+            //printf("%d, %d\n", i,j);
+            float fLeft = -1.0f + j*width+i*width/2.0f;
+            float fRight = fLeft + width;
+            VertexAtt pt1(Position(fLeft, fBottom, 0.0f), Color(1.0f, 0.0f, 0.0f));
+            VertexAtt pt2(Position(fRight, fBottom, 0.0f), Color(0.0f, 1.0f, 0.0f));
+            VertexAtt pt3(Position(0.5f*(fLeft+fRight), fTop, 0.0f), Color(0.0f, 0.0f, 1.0f));
+
+            vertices.push_back(pt1);
+            vertices.push_back(pt2);
+            vertices.push_back(pt3);
+
+        }
+    }
+
+    return 0;
 }
 
 int GlRender::initGL()
@@ -82,8 +134,11 @@ void GlRender::drawingGL()
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDrawArrays(GL_TRIANGLES, 3, 3);
+    int nNum = vertices.size()/3;
+    for(int i=0;i<nNum;i++){
+        glDrawArrays(GL_TRIANGLES, i*3, 3);
+
+    }
 
     glfwSwapBuffers(m_window);
     glfwPollEvents();

@@ -32,6 +32,13 @@ class GlRender
             pos = _pos;
             color = _color;
         };
+        void multi(float _factor){
+            pos.x*=_factor;
+            pos.y*=_factor;
+        };
+        void move_left(float x_pos){
+            pos.x -= x_pos;
+        };
     };
 
 
@@ -70,6 +77,9 @@ public:
     )GLSL";
     unsigned int fragmentShader {0};
     unsigned int shaderProgram {0};
+
+    int initVertex1();
+    int initVertex2();
 
     int initGL();
     void drawingGL();

@@ -21,10 +21,10 @@ namespace l1_ex3_2shader_program{
 }
 int main(){
     //l1::main();  //drawing triangle by array
-    //l1_refact::main();  //drawing triangle by array
+    l1_refact::main();  //drawing triangle by array
     //l1_ex::main();   //drawing triangle by incides
     //l1_ex2::main();   //1 program, 2 VAOs, VBOs
     //l1_ex2_2vao_2vbo::main();//1 program, 2 VAOs, VBOs sample
 
-    l1_ex3_2shader_program::main();//2 program, 2 VAOs, VBOs
+    //l1_ex3_2shader_program::main();//2 program, 2 VAOs, VBOs
 }
