@@ -53,10 +53,14 @@ endif (UNIX)
 add_executable(${out_target}
     main.cpp
     main_l1.cpp
+    main_l1_refact.cpp
     main_l1_ex_indices.cpp
     main_l1_ex2_2vao.cpp
     main_l1_ex2_2vao.sample.cpp
     main_l1_ex3_2shader_program.cpp
+    glrender.h
+    glrender.cpp
+
 )
 
 if (WIN32)
