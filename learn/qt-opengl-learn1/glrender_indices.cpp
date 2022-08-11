@@ -1,46 +1,21 @@
-#include "glrender.h"
+#include "GlRender_indices.h"
 #include <math.h>
 
 
 
-GlRender::GlRender(GLFWwindow *window)
+GlRender_indices::GlRender_indices(GLFWwindow *window)
 {
     m_window = window;
     initVertex2();
 }
 
-int GlRender::initVertex1()
-{
-    int nNum = 12;
-    for(int i=0;i<nNum;i++){
-        VertexAtt pt1(Position(0.0f, 0.0f, 0.0f), Color(1.0f, 0.0f, 0.0f));
-        VertexAtt pt2(Position(+1.0f, 0.0f, 0.0f), Color(0.0f, 1.0f, 0.0f));
-        VertexAtt pt3(Position(+0.5f, +1.0f, 0.0f), Color(0.0f, 0.0f, 1.0f));
-
-        pt1.multi(2.0f/nNum);
-        pt2.multi(2.0f/nNum);
-        pt3.multi(2.0f/nNum);
-
-
-        float bottomWidth = 2.0f/nNum;
-
-        pt1.move_left(1 - 2.0f/nNum*i);
-        pt2.move_left(1 - 2.0f/nNum*i);
-        pt3.move_left(1 - 2.0f/nNum*i);
-
-        vertices.push_back(pt1);
-        vertices.push_back(pt2);
-        vertices.push_back(pt3);
-
-        printf("");
-    }
-    return 0;
-}
-int GlRender::initVertex2()
+int GlRender_indices::initVertex2()
 {
     int numOfTriangleBottom = 3000;
     float width = 2.0f/numOfTriangleBottom;
     float height = width;
+    VertexAtt pt0(Position(0.0f, 0.0f, 0.0f), Color(0.0f, 0.0f, 0.0f));
+    vertices.push_back(pt0);
 
 
     for(int i=0;i<numOfTriangleBottom;i++){
@@ -51,6 +26,8 @@ int GlRender::initVertex2()
 
         for(int j=0;j<numOfTriangThisLine;j++){
 
+            indices.push_back(0);
+
             //printf("%d, %d\n", i,j);
             float fLeft = -1.0f + j*width+i*width/2.0f;
             float fRight = fLeft + width;
@@ -58,9 +35,15 @@ int GlRender::initVertex2()
             VertexAtt pt2(Position(fRight, fBottom, 0.0f), Color(0.0f, 1.0f, 0.0f));
             VertexAtt pt3(Position(0.5f*(fLeft+fRight), fTop, 0.0f), Color(0.0f, 0.0f, 1.0f));
 
+
+            indices.push_back(vertices.size());
             vertices.push_back(pt1);
+            indices.push_back(vertices.size());
             vertices.push_back(pt2);
+            indices.push_back(vertices.size());
             vertices.push_back(pt3);
+
+
 
         }
     }
@@ -68,7 +51,7 @@ int GlRender::initVertex2()
     return 0;
 }
 
-int GlRender::initGL()
+int GlRender_indices::initGL()
 {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -77,6 +60,12 @@ int GlRender::initGL()
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(VertexAtt), &vertices[0], GL_STATIC_DRAW);
+
+    unsigned int EBO;
+    glGenBuffers(1, &EBO);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()* sizeof(int), &indices[0], GL_STATIC_DRAW);
 
 
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -128,23 +117,20 @@ int GlRender::initGL()
     return 0;
 }
 
-void GlRender::drawingGL()
+void GlRender_indices::drawingGL()
 {
     glUseProgram(shaderProgram);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    int nNum = vertices.size()/3;
-    for(int i=0;i<nNum;i++){
-        glDrawArrays(GL_TRIANGLES, i*3, 3);
 
-    }
+    glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, 0);    
 
     glfwSwapBuffers(m_window);
     glfwPollEvents();
 }
 
-void GlRender::terminateGL()
+void GlRender_indices::terminateGL()
 {
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);

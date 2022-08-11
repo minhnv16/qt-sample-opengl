@@ -60,6 +60,8 @@ add_executable(${out_target}
     main_l1_ex3_2shader_program.cpp
     glrender.h
     glrender.cpp
+    glrender_indices.h
+    glrender_indices.cpp
 
 )
 
