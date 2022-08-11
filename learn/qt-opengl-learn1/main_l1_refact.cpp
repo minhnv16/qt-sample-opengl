@@ -1,4 +1,4 @@
-#include "GlRender_indices.h"
+
 #include "glrender.h"
 #include "glrender_indices.h"
 namespace l1_refact{
