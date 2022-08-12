@@ -3,6 +3,17 @@
 
 
 
+void GlRender_indices::ChangeVertexData()
+{
+    for(int i=1;i<vertices.size();i++){
+        vertices[i].pos.x -= 0.1f;
+        vertices[i].pos.y -= 0.1f;
+
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(VertexAtt), &vertices[0], GL_STATIC_DRAW);
+}
+
 GlRender_indices::GlRender_indices(GLFWwindow *window)
 {
     m_window = window;
@@ -59,9 +70,8 @@ int GlRender_indices::initGL()
 
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(VertexAtt), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(VertexAtt), &vertices[0], GL_DYNAMIC_DRAW );
 
-    unsigned int EBO;
     glGenBuffers(1, &EBO);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -124,7 +134,6 @@ void GlRender_indices::drawingGL()
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    GL_TRIANGLE_STRIP;
     glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(m_window);

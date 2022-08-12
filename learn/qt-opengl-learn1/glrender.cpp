@@ -3,6 +3,11 @@
 
 
 
+void GlRender::ChangeVertexData()
+{
+
+}
+
 GlRender::GlRender(GLFWwindow *window)
 {
     m_window = window;

@@ -2,13 +2,15 @@
 #define GLRENDER_INDICES_H
 
 
+#include "glrender.h"
+
 #include <iostream>
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 
 #include <vector>
-class GlRender_indices
+class GlRender_indices: public Renderer
 {
     struct Position{
         float x, y, z;
@@ -46,6 +48,7 @@ class GlRender_indices
 
 
 public:
+    virtual void ChangeVertexData();
     std::vector<VertexAtt> vertices;
     std::vector<int> indices;
 
@@ -57,6 +60,7 @@ public:
 
     unsigned int VAO {0};
     unsigned int VBO {0};
+    unsigned int EBO {0};
 
     //vertex shader
     const char * VertexShaderSource = R"GLSL(

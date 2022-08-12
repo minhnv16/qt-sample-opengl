@@ -8,7 +8,12 @@
 #include <GLFW/glfw3.h>
 
 #include <vector>
-class GlRender
+class Renderer{
+public:
+    virtual void ChangeVertexData() = 0;
+};
+
+class GlRender: public Renderer
 {
     struct Position{
         float x, y, z;
@@ -45,6 +50,7 @@ class GlRender
 
 
 public:
+    virtual void ChangeVertexData();
     std::vector<VertexAtt> vertices;
     int numOfTriangleBottom = 3000;
     GlRender(GLFWwindow* window);

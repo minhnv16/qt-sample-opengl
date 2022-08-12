@@ -1,6 +1,7 @@
 
 #include "glrender.h"
 #include "glrender_indices.h"
+#include <unistd.h>
 namespace l1_refact{
 
 using namespace std;
@@ -57,6 +58,16 @@ int main(){
     }
     return 0;
 }
+
+void* thread_handle_(void *p){
+    Renderer *pRenderer = (Renderer *)p;
+    while(1){
+        pRenderer->ChangeVertexData();
+        sleep(2);
+    }
+    return NULL;
+}
+
 int main_indices(){
     GLFWwindow* window = 0;
     if (GLFW_FALSE == glfwInit()) {
@@ -84,8 +95,11 @@ int main_indices(){
     }
 
     GlRender_indices re(window);
-    re.numOfTriangleBottom = 3000;
+    re.numOfTriangleBottom = 30;
     re.initGL();
+
+    pthread_t thread;
+    pthread_create(&thread, NULL, &thread_handle_, &re);
 
     double lastTime = glfwGetTime();
     int nbFrames = 0;
@@ -108,6 +122,8 @@ int main_indices(){
 
             nbFrames = 0;
             lastTime = currentTime;
+            re.ChangeVertexData();
+
         }
 
         re.drawingGL();
