@@ -42,10 +42,11 @@ class GlRender
     };
 
 
-    std::vector<VertexAtt> vertices;
 
 
 public:
+    std::vector<VertexAtt> vertices;
+    int numOfTriangleBottom = 3000;
     GlRender(GLFWwindow* window);
 
     GLFWwindow* m_window = 0;

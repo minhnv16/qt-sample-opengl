@@ -6,7 +6,6 @@
 GlRender::GlRender(GLFWwindow *window)
 {
     m_window = window;
-    initVertex2();
 }
 
 int GlRender::initVertex1()
@@ -38,7 +37,6 @@ int GlRender::initVertex1()
 }
 int GlRender::initVertex2()
 {
-    int numOfTriangleBottom = 3000;
     float width = 2.0f/numOfTriangleBottom;
     float height = width;
 
@@ -70,6 +68,8 @@ int GlRender::initVertex2()
 
 int GlRender::initGL()
 {
+    initVertex2();
+
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 

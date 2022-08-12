@@ -6,12 +6,10 @@
 GlRender_indices::GlRender_indices(GLFWwindow *window)
 {
     m_window = window;
-    initVertex2();
 }
 
 int GlRender_indices::initVertex2()
 {
-    int numOfTriangleBottom = 3000;
     float width = 2.0f/numOfTriangleBottom;
     float height = width;
     VertexAtt pt0(Position(0.0f, 0.0f, 0.0f), Color(0.0f, 0.0f, 0.0f));
@@ -53,6 +51,8 @@ int GlRender_indices::initVertex2()
 
 int GlRender_indices::initGL()
 {
+    initVertex2();
+
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
@@ -124,7 +124,8 @@ void GlRender_indices::drawingGL()
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, 0);    
+    GL_TRIANGLE_STRIP;
+    glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(m_window);
     glfwPollEvents();

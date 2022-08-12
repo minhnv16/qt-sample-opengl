@@ -31,6 +31,7 @@ int main(){
     }
 
     GlRender re(window);
+    re.numOfTriangleBottom = 3000;
     re.initGL();
 
     double lastTime = glfwGetTime();
@@ -47,6 +48,7 @@ int main(){
             printf("%f ms/frame\n", 1000.0f / double(nbFrames));
             printf("fps=%d\n", nbFrames);
 
+            printf("number of vertex=%d\n", re.vertices.size());
             nbFrames = 0;
             lastTime = currentTime;
         }
@@ -82,6 +84,7 @@ int main_indices(){
     }
 
     GlRender_indices re(window);
+    re.numOfTriangleBottom = 3000;
     re.initGL();
 
     double lastTime = glfwGetTime();
@@ -99,6 +102,9 @@ int main_indices(){
             // printf and reset timer
             printf("%f ms/frame\n", 1000.0f / double(nbFrames));
             printf("fps=%d\n", nbFrames);
+
+            printf("number of vertex=%d\n", re.vertices.size());
+            printf("number of indices=%d\n", re.indices.size());
 
             nbFrames = 0;
             lastTime = currentTime;

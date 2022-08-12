@@ -42,11 +42,15 @@ class GlRender_indices
     };
 
 
-    std::vector<VertexAtt> vertices;
-    std::vector<int> indices;
+
 
 
 public:
+    std::vector<VertexAtt> vertices;
+    std::vector<int> indices;
+
+    int numOfTriangleBottom = 3000;
+
     GlRender_indices(GLFWwindow* window);
 
     GLFWwindow* m_window = 0;
