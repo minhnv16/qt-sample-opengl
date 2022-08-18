@@ -3,7 +3,12 @@
 
 
 
-void GlRender::ChangeVertexData()
+void GlRender::MoveVertexData()
+{
+
+}
+
+void GlRender::MoveMatrixTransformData()
 {
 
 }
@@ -13,33 +18,6 @@ GlRender::GlRender(GLFWwindow *window)
     m_window = window;
 }
 
-int GlRender::initVertex1()
-{
-    int nNum = 12;
-    for(int i=0;i<nNum;i++){
-        VertexAtt pt1(Position(0.0f, 0.0f, 0.0f), Color(1.0f, 0.0f, 0.0f));
-        VertexAtt pt2(Position(+1.0f, 0.0f, 0.0f), Color(0.0f, 1.0f, 0.0f));
-        VertexAtt pt3(Position(+0.5f, +1.0f, 0.0f), Color(0.0f, 0.0f, 1.0f));
-
-        pt1.multi(2.0f/nNum);
-        pt2.multi(2.0f/nNum);
-        pt3.multi(2.0f/nNum);
-
-
-        float bottomWidth = 2.0f/nNum;
-
-        pt1.move_left(1 - 2.0f/nNum*i);
-        pt2.move_left(1 - 2.0f/nNum*i);
-        pt3.move_left(1 - 2.0f/nNum*i);
-
-        vertices.push_back(pt1);
-        vertices.push_back(pt2);
-        vertices.push_back(pt3);
-
-        printf("");
-    }
-    return 0;
-}
 int GlRender::initVertex2()
 {
     float width = 2.0f/numOfTriangleBottom;

@@ -3,7 +3,7 @@
 
 
 
-void GlRender_indices::ChangeVertexData()
+void GlRender_indices::MoveVertexData()
 {
     for(int i=1;i<vertices.size();i++){
         vertices[i].pos.x -= 0.1f;
@@ -12,6 +12,11 @@ void GlRender_indices::ChangeVertexData()
     }
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(VertexAtt), &vertices[0], GL_STATIC_DRAW);
+}
+
+void GlRender_indices::MoveMatrixTransformData()
+{
+
 }
 
 GlRender_indices::GlRender_indices(GLFWwindow *window)

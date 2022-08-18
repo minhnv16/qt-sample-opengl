@@ -12,43 +12,11 @@
 #include <vector>
 class GlRender_indices: public Renderer
 {
-    struct Position{
-        float x, y, z;
-        Position(float _x, float  _y, float  _z){
-            x=_x,y=_y,z=_z;
-        };
-        Position(){};
-    };
-    struct Color{
-        float r, g, b;
-        Color(float _r, float _g, float _b){
-            r=_r,g=_g,b=_b;
-        };
-        Color(){};
-    };
-    struct VertexAtt{
-        Position pos;
-        Color color;
-        VertexAtt(Position _pos, Color _color)
-        {
-            pos = _pos;
-            color = _color;
-        };
-        void multi(float _factor){
-            pos.x*=_factor;
-            pos.y*=_factor;
-        };
-        void move_left(float x_pos){
-            pos.x -= x_pos;
-        };
-    };
-
-
-
-
 
 public:
-    virtual void ChangeVertexData();
+    virtual void MoveVertexData();
+    virtual void MoveMatrixTransformData();
+
     std::vector<VertexAtt> vertices;
     std::vector<int> indices;
 

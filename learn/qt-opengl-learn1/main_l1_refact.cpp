@@ -59,15 +59,20 @@ int main(){
     return 0;
 }
 
-void* thread_handle_(void *p){
-    Renderer *pRenderer = (Renderer *)p;
-    while(1){
-        pRenderer->ChangeVertexData();
-        sleep(2);
-    }
-    return NULL;
-}
 
+
+GlRender_indices *g_pRender = NULL;
+
+void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, int mode) {
+    std::cout << "key :" << key << std::endl;
+    if (action == GLFW_PRESS) {
+        if (key >= 320 && key <= 324) {
+            if(g_pRender){
+                g_pRender->MoveVertexData();
+            }
+        }
+    }
+}
 int main_indices(){
     GLFWwindow* window = 0;
     if (GLFW_FALSE == glfwInit()) {
@@ -83,6 +88,7 @@ int main_indices(){
         glfwTerminate();
         return -1;
     }
+    glfwSetKeyCallback(window, key_callback_learn);
     glfwMakeContextCurrent(window);
 
     glewExperimental = GL_TRUE;
@@ -95,11 +101,10 @@ int main_indices(){
     }
 
     GlRender_indices re(window);
-    re.numOfTriangleBottom = 30;
+    g_pRender = &re;
+    re.numOfTriangleBottom = 3000;
     re.initGL();
 
-    pthread_t thread;
-    pthread_create(&thread, NULL, &thread_handle_, &re);
 
     double lastTime = glfwGetTime();
     int nbFrames = 0;
@@ -122,12 +127,11 @@ int main_indices(){
 
             nbFrames = 0;
             lastTime = currentTime;
-            re.ChangeVertexData();
-
         }
 
         re.drawingGL();
     }
+
     return 0;
 }
 
