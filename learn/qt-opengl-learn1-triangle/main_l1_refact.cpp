@@ -102,7 +102,7 @@ int main_indices(){
 
     GlRender_indices re(window);
     g_pRender = &re;
-    re.numOfTriangleBottom = 3000;
+    re.numOfTriangleBottom = 111;
     re.initGL();
 
 
