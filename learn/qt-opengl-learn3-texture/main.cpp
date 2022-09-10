@@ -1,11 +1,11 @@
 
-namespace l2{
+namespace l3{
     int main();
 }
 
 
 int main(){
-    l2::main();  //shader and uniform
+    l3::main();  //shader and uniform
 
 
 }

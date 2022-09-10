@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(out_target qt-opengl-learn2)
+set(out_target qt-opengl-learn3-textures)
 project(${out_target} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -52,7 +52,7 @@ endif (UNIX)
 
 add_executable(${out_target}
     main.cpp
-    main_l2.cpp
+    main_l3.cpp
 
 )
 

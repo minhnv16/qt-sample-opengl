@@ -162,11 +162,11 @@ int main()
 
 
 
+    glUseProgram(shaderProgram);
+    int vertexColorLocation = glGetUniformLocation(shaderProgram, "vecColor");
 
     while (!glfwWindowShouldClose(window))
     {
-        glUseProgram(shaderProgram);
-        int vertexColorLocation = glGetUniformLocation(shaderProgram, "vecColor");
         float timeValue = glfwGetTime();
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 
