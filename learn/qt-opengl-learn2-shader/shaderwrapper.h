@@ -6,7 +6,7 @@ using namespace std;
 class ShaderWrapper
 {
 public:
-    ShaderWrapper();
+    //ShaderWrapper();
 
 public:
     // the program ID

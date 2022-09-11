@@ -152,3 +152,27 @@ void GlRender_indices::terminateGL()
     glfwTerminate();
 
 }
+
+void GlRender_indices::use()
+{
+    glUseProgram(shaderProgram);
+
+}
+
+void GlRender_indices::setBool(const std::string &name, bool value) const
+{
+    glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), (int)value);
+
+}
+
+void GlRender_indices::setInt(const std::string &name, int value) const
+{
+    glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), value);
+
+}
+
+void GlRender_indices::setFloat(const std::string &name, float value) const
+{
+    glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), value);
+
+}

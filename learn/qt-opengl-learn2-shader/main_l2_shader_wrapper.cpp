@@ -10,8 +10,8 @@ using namespace std;
 
 int main(){
 
-    ShaderWrapper shd;
-
+    //ShaderWrapper shd("", "");
+    ShaderWrapper ourShader("/home/minh/Desktop/vertex.sh", "/home/minh/Desktop/frag.sh");
     return 0;
 }
 }
