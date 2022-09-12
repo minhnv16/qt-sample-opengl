@@ -14,7 +14,6 @@ public:
 
     // constructor reads and builds the shader
     ShaderWrapper(const char* vertexPath, const char* fragmentPath);
-    ShaderWrapper(const char* vertexPath, const char* fragmentPath, int nData);
 
     // use/activate the shader
     void use();

@@ -19,31 +19,6 @@ ShaderWrapper::ShaderWrapper()
 
 ShaderWrapper::ShaderWrapper(const char *vertexPath, const char *fragmentPath)
 {
-
-    GLFWwindow* window = 0;
-    if (GLFW_FALSE == glfwInit()) {
-        return ;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    int nWidth = 800, nHeight = 800;
-    window = glfwCreateWindow(nWidth, nHeight, "Test OpenGL", NULL /* glfwGetPrimaryMonitor()*/, NULL);
-    if (!window) {
-        glfwTerminate();
-        return ;
-    }
-    glfwMakeContextCurrent(window);
-
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-
-    if (GLEW_OK != err) {
-        glfwTerminate();
-        return;
-    }
-
     printf(__FUNCTION__);
     struct stat stVertex;
     stat(vertexPath, &stVertex);
