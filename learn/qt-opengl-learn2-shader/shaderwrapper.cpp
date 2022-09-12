@@ -1,54 +1,96 @@
 #include "shaderwrapper.h"
-#include <sys/stat.h>
 
 #include <iostream>
+#include <fstream>
+#include <vector>
+
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
 #include <memory>
-struct stat st;
-//ShaderWrapper::ShaderWrapper()
-//{
+#include <sys/stat.h>
 
-//}
+ShaderWrapper::ShaderWrapper()
+{
+    printf(__FUNCTION__);
+    return;
+}
 
 ShaderWrapper::ShaderWrapper(const char *vertexPath, const char *fragmentPath)
 {
 
+    GLFWwindow* window = 0;
+    if (GLFW_FALSE == glfwInit()) {
+        return ;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    int nWidth = 800, nHeight = 800;
+    window = glfwCreateWindow(nWidth, nHeight, "Test OpenGL", NULL /* glfwGetPrimaryMonitor()*/, NULL);
+    if (!window) {
+        glfwTerminate();
+        return ;
+    }
+    glfwMakeContextCurrent(window);
+
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+
+    if (GLEW_OK != err) {
+        glfwTerminate();
+        return;
+    }
+
     printf(__FUNCTION__);
-    return;
     struct stat stVertex;
     stat(vertexPath, &stVertex);
     size_t sizeVertex = stVertex.st_size;
+    printf("%ld\n", sizeVertex);
+
 
     FILE *fileVertex = NULL;
     std::shared_ptr<char> pSharedVertex((char*)malloc(sizeVertex));
 
 
-    //char* pVertex = (char*) malloc(sizeVertex);
+    printf("start Read shader\n");
 
     fileVertex = fopen(vertexPath,"rb");
     if(fileVertex){
         fread(pSharedVertex.get(), sizeVertex, 1, fileVertex);
     }
     else{
+        printf("Read shader Failed\n");
         return;
+
     }
+    printf("Read fileVertex OK\n");
+
 
     struct stat stFragment;
     stat(fragmentPath, &stFragment);
     size_t sizeFragment = stFragment.st_size;
+
     FILE *fileFragment = NULL;
     std::shared_ptr<char> pSharedFragment((char*) malloc(sizeFragment));
-    //char* pSharedFragment = (char*) malloc(sizeFragment);
+    printf("start Read shader\n");
+
     fileFragment = fopen(fragmentPath,"rb");
+
     if(fileFragment){
         fread(pSharedFragment.get(), sizeFragment, 1, fileFragment);
+        printf("end fread\n");
+
     }
     else{
+        printf("Read shader Failed\n");
         return;
+
     }
+    printf("Read fileFragment OK\n");
+
     char* vShaderCode = pSharedVertex.get();
     char* fShaderCode = pSharedFragment.get();
 
@@ -92,6 +134,7 @@ ShaderWrapper::ShaderWrapper(const char *vertexPath, const char *fragmentPath)
         };
 
     }
+    printf("Compile shader OK");
 
     // shader Program
     ID = glCreateProgram();

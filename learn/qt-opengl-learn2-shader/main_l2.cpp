@@ -4,7 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 namespace l2{
-using namespace std;
 struct Position{
     float x, y, z;
     Position(float _x, float  _y, float  _z){
