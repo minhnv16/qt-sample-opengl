@@ -4,8 +4,12 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 
-namespace l3{
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+namespace l3_textures{
 using namespace std;
+
 struct Position{
     float x, y, z;
     Position(float _x, float  _y, float  _z){
@@ -20,28 +24,39 @@ struct Color{
     };
     Color(){};
 };
+
+
+struct TextureCoord{
+    float x, y;
+    TextureCoord(float _x, float  _y){
+        x=_x,y=_y;
+    };
+    TextureCoord(){};
+};
+
+
 struct VertexAtt{
     Position pos;
     Color color;
-    VertexAtt(Position _pos, Color _color)
+    TextureCoord texCord;
+    VertexAtt(Position _pos, Color _color, TextureCoord _texCord)
     {
         pos = _pos;
         color = _color;
+        texCord = _texCord;
     };
 };
 
 
 
-VertexAtt vertices[]={
-    VertexAtt(Position(-0.5f, -0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f)),
-    VertexAtt(Position(+0.5f, -0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f)),
-    VertexAtt(Position(+0.0f, +0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f)),
-
-    VertexAtt(Position(+0.8f, +0.8f, 0.0f), Color(1.0f, 0.0f, 0.0f)),
-    VertexAtt(Position(+0.8f, +0.9f, 0.0f), Color(0.0f, 1.0f, 0.0f)),
-    VertexAtt(Position(+0.7f, +0.9f, 0.0f), Color(0.0f, 0.0f, 1.0f)),
-
+VertexAtt vertices[] = {
+    // positions                           // colors                // texture coords
+    VertexAtt(Position(0.5f,  0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f), TextureCoord(1.0f, 1.0f)),   // top right
+    VertexAtt(Position(0.5f, -0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f), TextureCoord(1.0f, 0.0f)),   // bottom right
+    VertexAtt(Position(-0.5f, -0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f), TextureCoord(0.0f, 0.0f)),   // bottom left
+    VertexAtt(Position(-0.5f,  0.5f, 0.0f), Color(1.0f, 1.0f, 0.0f), TextureCoord(0.0f, 1.0f))    // top left
 };
+
 
 
 int main()
@@ -88,12 +103,18 @@ int main()
     //vertex shader
     const char * VertexShaderSource = R"GLSL(
         #version 330 core
-        in vec3 aPos;
-        in vec3 iColor;
-        out vec4 oColor;
-        void main(){
-            gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);
-            oColor = vec4(iColor.x, iColor.y, iColor.z, 1.0f);
+        layout (location = 0) in vec3 aPos;
+        layout (location = 1) in vec3 aColor;
+        layout (location = 2) in vec2 aTexCoord;
+
+        out vec3 ourColor;
+        out vec2 TexCoord;
+
+        void main()
+        {
+            gl_Position = vec4(aPos, 1.0);
+            ourColor = aColor;
+            TexCoord = aTexCoord;
         }
     )GLSL";
     unsigned int vertexShader;
@@ -115,13 +136,17 @@ int main()
     //fragment shader
     const char * FragmentShaderSource = R"GLSL(
         #version 330 core
-        in vec4 oColor;
         out vec4 FragColor;
-        uniform vec4 vecColor;
-        void main(){
-            //FragColor = oColor;
-            FragColor = vecColor;
 
+        in vec3 ourColor;
+        in vec2 TexCoord;
+
+        uniform sampler2D ourTexture;
+
+        void main()
+        {
+            //FragColor = vec4(ourColor, 1.0f);
+            FragColor = texture(ourTexture, TexCoord);
         }
     )GLSL";
     unsigned int fragmentShader;
@@ -148,7 +173,6 @@ int main()
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::LINK\n" << infoLog << std::endl;
         return -1;
-
     }
 
 
@@ -157,33 +181,78 @@ int main()
     glVertexAttribPointer(aPosLocation, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAtt), (void*)0);
     glEnableVertexAttribArray(aPosLocation);
 
-    unsigned int iColor = glGetAttribLocation(shaderProgram, "iColor");
-    glVertexAttribPointer(iColor, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAtt), (void*)(sizeof(Position)));
-    glEnableVertexAttribArray(iColor);
+    unsigned int aColor = glGetAttribLocation(shaderProgram, "aColor");
+    glVertexAttribPointer(aColor, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAtt), (void*)(sizeof(Position)));
+    glEnableVertexAttribArray(aColor);
 
 
+    unsigned int aTexCoord = glGetAttribLocation(shaderProgram, "aTexCoord");
+    glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(VertexAtt), (void*)(sizeof(Position)+sizeof(Color)));
+    glEnableVertexAttribArray(aTexCoord);
 
 
+    //begin loading image
+    int width, height, nrChannels;
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    unsigned char *data = stbi_load(
+        "../qt-opengl-learn3-texture/wall.jpg",
+        &width, &height, &nrChannels, 0);
+    printf("w=%d h=%d\n", width, height);
+    if(data){
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+             0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else{
+        std::cout << "Failed to load texture" << std::endl;
+    }
 
+    //end loading image
+
+
+    glfwSwapInterval(0);
+    double lastTime = glfwGetTime();
+    int nbFrames = 0;
     glUseProgram(shaderProgram);
-    int vertexColorLocation = glGetUniformLocation(shaderProgram, "vecColor");
 
     while (!glfwWindowShouldClose(window))
     {
-        float timeValue = glfwGetTime();
-        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+        double currentTime = glfwGetTime();
+        nbFrames++;
+        if (currentTime - lastTime >= 1.0)
+        { // If last prinf() was more than 1 sec ago
+            // printf and reset timer
+            printf("%f ms/frame\n", 1000.0f / double(nbFrames));
+            printf("fps=%d\n", nbFrames);
+            nbFrames = 0;
+            lastTime = currentTime;
+        }
 
-        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
+             0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+
 
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawArrays(GL_TRIANGLES, 3, 3);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+        //glDrawArrays(GL_TRIANGLES, 3, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    stbi_image_free(data);
+
     glDeleteBuffers(1, &VBO);
     //glDeleteBuffers(1, &EBO);
     //glDeleteProgram(shaderProgram);

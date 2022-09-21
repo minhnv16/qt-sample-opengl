@@ -102,7 +102,7 @@ int main_indices(){
 
     GlRender_indices re(window);
     g_pRender = &re;
-    re.numOfTriangleBottom = 111;
+    re.numOfTriangleBottom = 10;
     re.initGL();
 
 
@@ -112,7 +112,7 @@ int main_indices(){
 
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(0);
-
+    glLineWidth(3);
     while (!glfwWindowShouldClose(window))
     {
         double currentTime = glfwGetTime();
