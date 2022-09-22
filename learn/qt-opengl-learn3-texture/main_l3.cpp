@@ -113,10 +113,12 @@ int main()
         uniform mat4 transform;
         out vec3 ourColor;
         out vec2 TexCoord;
+        out vec3 oPos;
 
         void main()
         {
             gl_Position = transform * vec4(aPos, 1.0);
+            oPos = aPos;
             ourColor = aColor;
             TexCoord = aTexCoord;
         }
@@ -144,13 +146,21 @@ int main()
 
         in vec3 ourColor;
         in vec2 TexCoord;
-
+        in vec3 oPos;
         uniform sampler2D ourTexture;
 
         void main()
         {
-            //FragColor = vec4(ourColor, 1.0f);
-            FragColor = texture(ourTexture, TexCoord);
+            if(abs(oPos.x) >= 0.45f
+                || abs(oPos.y) >= 0.45f
+            ){
+                FragColor = vec4(ourColor, 1.0f);
+                //FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+            }
+            else{
+                FragColor = texture(ourTexture, TexCoord);
+
+            }
         }
     )GLSL";
     unsigned int fragmentShader;
@@ -227,7 +237,7 @@ int main()
     double lastTime = glfwGetTime();
     int nbFrames = 0;
     glUseProgram(shaderProgram);
-
+    glLineWidth(5);
     while (!glfwWindowShouldClose(window))
     {
         double currentTime = glfwGetTime();
@@ -256,7 +266,7 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-        //glDrawArrays(GL_TRIANGLES, 3, 3);
+        //glDrawArrays(GL_LINE_LOOP, 0, 4);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
