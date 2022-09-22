@@ -256,13 +256,6 @@ int main()
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
-             0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-
-
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
