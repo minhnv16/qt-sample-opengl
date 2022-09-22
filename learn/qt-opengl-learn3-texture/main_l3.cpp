@@ -4,6 +4,10 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 
+#include "../../glm/glm.hpp"
+#include "../../glm/gtc/matrix_transform.hpp"
+#include "../../glm/gtc/type_ptr.hpp"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -106,13 +110,13 @@ int main()
         layout (location = 0) in vec3 aPos;
         layout (location = 1) in vec3 aColor;
         layout (location = 2) in vec2 aTexCoord;
-
+        uniform mat4 transform;
         out vec3 ourColor;
         out vec2 TexCoord;
 
         void main()
         {
-            gl_Position = vec4(aPos, 1.0);
+            gl_Position = transform * vec4(aPos, 1.0);
             ourColor = aColor;
             TexCoord = aTexCoord;
         }
@@ -215,6 +219,9 @@ int main()
 
     //end loading image
 
+    unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+
+
 
     glfwSwapInterval(0);
     double lastTime = glfwGetTime();
@@ -233,6 +240,10 @@ int main()
             nbFrames = 0;
             lastTime = currentTime;
         }
+
+        glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
