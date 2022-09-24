@@ -53,7 +53,8 @@ endif (UNIX)
 add_executable(${out_target}
     main.cpp
     main_l3.cpp
-
+texturebase.h texturebase.cpp
+texturewall.h texturewall.cpp
 )
 
 if (WIN32)

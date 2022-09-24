@@ -215,9 +215,23 @@ int main()
     glVertexAttribPointer(iColor, 3, GL_FLOAT, GL_FALSE, sizeof(VertexAtt), (void*)(sizeof(Position)));
     glEnableVertexAttribArray(iColor);
 
+    glfwSwapInterval(0);
+    double lastTime = glfwGetTime();
+    int nbFrames = 0;
 
     while (!glfwWindowShouldClose(window))
     {
+        double currentTime = glfwGetTime();
+        nbFrames++;
+        if (currentTime - lastTime >= 1.0)
+        { // If last prinf() was more than 1 sec ago
+            // printf and reset timer
+            printf("%f ms/frame\n", 1000.0f / double(nbFrames));
+            printf("fps=%d\n", nbFrames);
+            nbFrames = 0;
+            lastTime = currentTime;
+        }
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(shaderProgram0);

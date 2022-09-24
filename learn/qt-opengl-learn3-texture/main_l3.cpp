@@ -8,8 +8,9 @@
 #include "../../glm/gtc/matrix_transform.hpp"
 #include "../../glm/gtc/type_ptr.hpp"
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "texturebase.h"
+#include "texturewall.h"
 
 namespace l3_textures{
 using namespace std;
@@ -226,6 +227,7 @@ int main()
     else{
         std::cout << "Failed to load texture" << std::endl;
     }
+    stbi_image_free(data);
 
     //end loading image
 
@@ -238,6 +240,8 @@ int main()
     int nbFrames = 0;
     glUseProgram(shaderProgram);
     glLineWidth(5);
+
+
     while (!glfwWindowShouldClose(window))
     {
         double currentTime = glfwGetTime();
@@ -265,7 +269,6 @@ int main()
         glfwPollEvents();
     }
 
-    stbi_image_free(data);
 
     glDeleteBuffers(1, &VBO);
     //glDeleteBuffers(1, &EBO);
@@ -273,5 +276,79 @@ int main()
     glfwTerminate();
     return 0;
 }
-}//namespace l1
+
+int main_wrapper(){
+
+    GLFWwindow* window = 0;
+    if (GLFW_FALSE == glfwInit()) {
+        return -1;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    int nWidth = 800, nHeight = 800;
+    window = glfwCreateWindow(nWidth, nHeight, "Test OpenGL", NULL /* glfwGetPrimaryMonitor()*/, NULL);
+    if (!window) {
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+
+    glewExperimental = GL_TRUE;
+    //init glew
+    GLenum err = glewInit();
+
+    if (GLEW_OK != err) {
+        glfwTerminate();
+        return -1;
+    }
+
+    TextureBase re;
+    TextureWall re_wall;
+
+    int nInit = 0;
+    nInit = re.initGL();
+    if(nInit <0){
+        return -1;
+    }
+
+    nInit = re_wall.initGL();
+    if(nInit <0){
+        return -1;
+    }
+
+    glfwSwapInterval(0);
+    double lastTime = glfwGetTime();
+    int nbFrames = 0;
+
+    glLineWidth(5);
+
+    while (!glfwWindowShouldClose(window))
+    {
+        double currentTime = glfwGetTime();
+        nbFrames++;
+        if (currentTime - lastTime >= 1.0)
+        { // If last prinf() was more than 1 sec ago
+            // printf and reset timer
+            printf("%f ms/frame\n", 1000.0f / double(nbFrames));
+            printf("fps=%d\n", nbFrames);
+            nbFrames = 0;
+            lastTime = currentTime;
+        }
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        re.drawingGL();
+        re_wall.drawingGL();
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+    }
+
+    return 0;
+}
+}//namespace l3
 
