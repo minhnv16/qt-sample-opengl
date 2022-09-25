@@ -6,7 +6,7 @@ namespace l3_textures{
 }
 
 int main(){
-    l3_textures::main();  //shader and uniform
-    //l3_textures::main_wrapper();  //shader and uniform
+    //l3_textures::main();  //shader and uniform
+    l3_textures::main_wrapper();  //shader and uniform
 
 }
