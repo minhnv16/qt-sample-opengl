@@ -37,3 +37,14 @@ g++ main.cpp WindowCreator.cpp Source2_sample_drawing_triangle_index.cpp Learn6.
 g++ main.cpp WindowCreator.cpp Source2_sample_drawing_triangle_index.cpp Learn6.cpp Learn6_transform.cpp -I`pwd`/ext_lib/out-glew/include/ -I`pwd`/ext_lib/out-glfw/include/ `pwd`/ext_lib/out-glew/lib/libGLEW.a `pwd`/ext_lib/out-glfw/lib/libglfw3.a -lGL -lX11 -ldl -lpthread
 
 
+# link static for sample texture
+g++ \
+main.cpp \
+main_l3.cpp \
+texturebase.h \
+texturebase.cpp \
+texturewall.h \
+texturewall.cpp \
+ -I`pwd`/../../ext_lib/out-glew/include/ -I`pwd`/../../ext_lib/out-glfw/include/ `pwd`/../../ext_lib/out-glew/lib/libGLEW.a `pwd`/../../ext_lib/out-glfw/lib/libglfw3.a \
+ -lGL -lX11 -ldl -lpthread
+
