@@ -11,12 +11,9 @@ public:
 
 public:
     virtual const char * GetFragmentShaderSource();
-
     virtual int initVertex();
     virtual void drawingGL();
-
     virtual const char* GetTexturePath();
-
 };
 
 }

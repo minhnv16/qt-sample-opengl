@@ -162,12 +162,10 @@ int TextureBase::initGL()
     glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(VertexAtt), (void*)(sizeof(Position)+sizeof(Color)));
     glEnableVertexAttribArray(aTexCoord);
 
-
     //begin loading image
     int width, height, nrChannels;
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &m_nTexture);
+    glBindTexture(GL_TEXTURE_2D, m_nTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -177,8 +175,6 @@ int TextureBase::initGL()
         &width, &height, &nrChannels, 0);
     printf("w=%d h=%d\n", width, height);
     if(data){
-
-        glUseProgram(m_shaderProgram);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
              0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -187,9 +183,7 @@ int TextureBase::initGL()
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-
     //end loading image
-
 
     return 0;
 }
@@ -203,6 +197,8 @@ void TextureBase::drawingGL()
     transformLoc = glGetUniformLocation(m_shaderProgram, "transform");
     transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+    glBindTexture(GL_TEXTURE_2D, m_nTexture);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);

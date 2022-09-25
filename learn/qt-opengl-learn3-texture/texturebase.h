@@ -65,6 +65,9 @@ public:
     //program shader
     unsigned int m_shaderProgram {0};
 
+    //texture
+    unsigned int m_nTexture;
+
 public:
     TextureBase();
 
@@ -74,7 +77,6 @@ public:
     virtual void terminateGL();
 
     virtual const char* GetTexturePath();
-
 
 };
 

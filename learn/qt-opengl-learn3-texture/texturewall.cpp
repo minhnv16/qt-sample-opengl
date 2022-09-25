@@ -12,6 +12,7 @@ const char *TextureWall::GetTexturePath()
     return "../qt-opengl-learn3-texture/images.jpeg";
 
 }
+
 const char *TextureWall::GetFragmentShaderSource()
 {
     const char * FragmentShaderSource = R"GLSL(
@@ -49,6 +50,8 @@ void TextureWall::drawingGL()
     transformLoc = glGetUniformLocation(m_shaderProgram, "transform");
     transform = glm::rotate(transform, -(float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+
+    glBindTexture(GL_TEXTURE_2D, m_nTexture);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
