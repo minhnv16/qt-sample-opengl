@@ -1,3 +1,7 @@
+
+
+
+
 # qt-sample-opengl
 sudo apt-get install libgl-dev libglu1-mesa libglu1-mesa-dev
 
@@ -9,6 +13,14 @@ sudo apt-get install libgl-dev libxrandr-dev libxinerama-dev libxcursor-dev libx
 
 
 
+#for building glfw
+sudo apt-get install cmake3 libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
+
+cmake -DCMAKE_INSTALL_PREFIX:PATH=`pwd`/../out-glfw/ .
+make
+make install
+
+
 
 #for building glew
 cmake -DCMAKE_INSTALL_PREFIX:PATH=`pwd`/../../../out-glew/ .
@@ -17,11 +29,7 @@ make install
 
 
 
-#for building glfw
 
-cmake -DCMAKE_INSTALL_PREFIX:PATH=`pwd`/../out-glfw/ .
-make
-make install
 
 
 

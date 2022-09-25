@@ -7,8 +7,8 @@
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <math.h>
+#include <memory>
 #include <sys/stat.h>
-#include <bits/shared_ptr.h>
 namespace l2_shader_wrap{
 
 int main(){

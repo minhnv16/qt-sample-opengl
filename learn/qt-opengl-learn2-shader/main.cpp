@@ -8,7 +8,7 @@ namespace l2_shader_wrap{
 }
 
 int main(){
-    //l2::main();  //shader and uniform
-    l2_shader_wrap::main();
+    l2::main();  //shader and uniform
+    //l2_shader_wrap::main();
 
 }
