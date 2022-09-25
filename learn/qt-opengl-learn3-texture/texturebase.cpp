@@ -82,7 +82,7 @@ int TextureBase::initVertex()
     vertices.push_back(VertexAtt(Position(+0.5f, +0.5f, 0.0f), Color(1.0f, 0.0f, 0.0f), TextureCoord(1.0f, 1.0f)));   // top right
     vertices.push_back(VertexAtt(Position(+0.5f, -0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f), TextureCoord(1.0f, 0.0f)));   // bottom right
     vertices.push_back(VertexAtt(Position(-0.5f, -0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f), TextureCoord(0.0f, 0.0f)));   // bottom left
-    vertices.push_back(VertexAtt(Position(-0.5f, +0.5f, 0.0f), Color(1.0f, 1.0f, 0.0f), TextureCoord(0.0f, 1.0f)));    // top left
+    vertices.push_back(VertexAtt(Position(-0.5f, +0.5f, 0.0f), Color(1.0f, 1.0f, 0.0f), TextureCoord(0.0f, 1.0f)));   // top left
 
     return 0;
 }
