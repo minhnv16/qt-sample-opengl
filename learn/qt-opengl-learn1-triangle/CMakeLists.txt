@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 set(out_target qt-opengl-learn1-triangle)
 project(${out_target} LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
@@ -92,5 +92,3 @@ endif (UNIX)
 
 
 
-install(TARGETS ${out_target}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
