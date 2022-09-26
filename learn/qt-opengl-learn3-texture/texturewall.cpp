@@ -25,6 +25,7 @@ const char *TextureWall::GetFragmentShaderSource()
         void main()
         {
             FragColor = texture(ourTexture, TexCoord);
+            FragColor = vec4(FragColor.x, FragColor.y, FragColor.z, 0.3f);
         }
     )GLSL";
     return FragmentShaderSource;
@@ -34,9 +35,9 @@ int TextureWall::initVertex()
 {
     // positions                           // colors                // texture coords
     vertices.push_back(VertexAtt(Position(+1.0f, +1.0f, 0.0f), Color(1.0f, 0.0f, 0.0f), TextureCoord(1.0f, 1.0f)));   // top right
-    vertices.push_back(VertexAtt(Position(+1.0f, +0.5f, 0.0f), Color(0.0f, 1.0f, 0.0f), TextureCoord(1.0f, 0.0f)));   // bottom right
-    vertices.push_back(VertexAtt(Position(+0.5f, +0.5f, 0.0f), Color(0.0f, 0.0f, 1.0f), TextureCoord(0.0f, 0.0f)));   // bottom left
-    vertices.push_back(VertexAtt(Position(+0.5f, +1.0f, 0.0f), Color(1.0f, 1.0f, 0.0f), TextureCoord(0.0f, 1.0f)));   // top left
+    vertices.push_back(VertexAtt(Position(+1.0f, +0.4f, 0.0f), Color(0.0f, 1.0f, 0.0f), TextureCoord(1.0f, 0.0f)));   // bottom right
+    vertices.push_back(VertexAtt(Position(+0.4f, +0.4f, 0.0f), Color(0.0f, 0.0f, 1.0f), TextureCoord(0.0f, 0.0f)));   // bottom left
+    vertices.push_back(VertexAtt(Position(+0.4f, +1.0f, 0.0f), Color(1.0f, 1.0f, 0.0f), TextureCoord(0.0f, 1.0f)));   // top left
     return 0;
 }
 
