@@ -361,8 +361,8 @@ int main_2texture()
         in vec3 ourColor;
         in vec2 TexCoord;
         in vec3 oPos;
-        uniform sampler2D ourTexture0;
-        uniform sampler2D ourTexture1;
+        uniform sampler2D texture0;
+        uniform sampler2D texture1;
 
         void main()
         {
@@ -373,10 +373,12 @@ int main_2texture()
                 //FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
             }
             else{
-                FragColor = texture(ourTexture0, TexCoord);
+                //FragColor = texture(texture1, TexCoord);
+                FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.2);
 
             }
         }
+
     )GLSL";
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -420,13 +422,6 @@ int main_2texture()
     glEnableVertexAttribArray(aTexCoord);
 
 
-
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, texture1);
-//    glActiveTexture(GL_TEXTURE1);
-//    glBindTexture(GL_TEXTURE_2D, texture2);
-
-
     //begin loading image
     unsigned int texture0;
     if(1)
@@ -436,16 +431,16 @@ int main_2texture()
 
 
         glGenTextures(1, &texture0);
-        glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
         glBindTexture(GL_TEXTURE_2D, texture0);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        unsigned char *data = stbi_load(
-            //"../qt-opengl-learn3-texture/wall.jpg",
-            "../qt-opengl-learn3-texture/images.jpeg",
 
+        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+
+        unsigned char *data = stbi_load(
+            "../qt-opengl-learn3-texture/wall.jpg",
             &width, &height, &nrChannels, 0);
         printf("w=%d h=%d\n", width, height);
         if(data){
@@ -466,15 +461,14 @@ int main_2texture()
         int width, height, nrChannels;
 
         glGenTextures(1, &texture1);
-        glActiveTexture(GL_TEXTURE1); // activate the texture unit first before binding texture
         glBindTexture(GL_TEXTURE_2D, texture1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        stbi_set_flip_vertically_on_load(true);
         unsigned char *data = stbi_load(
-            "../qt-opengl-learn3-texture/wall.jpg",
-            //"../qt-opengl-learn3-texture/images.jpeg",
+            "../qt-opengl-learn3-texture/images.jpeg",
             &width, &height, &nrChannels, 0);
         printf("w=%d h=%d\n", width, height);
         if(data){
@@ -496,6 +490,10 @@ int main_2texture()
     double lastTime = glfwGetTime();
     int nbFrames = 0;
     glUseProgram(shaderProgram);
+
+    glUniform1i(glGetUniformLocation(shaderProgram, "texture0"), 0);
+    glUniform1i(glGetUniformLocation(shaderProgram, "texture1"), 1);
+
     glLineWidth(5);
 
 
@@ -520,11 +518,13 @@ int main_2texture()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_2D, texture1);
+        // bind textures on corresponding texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture0);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture1);
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-        //glDrawArrays(GL_LINE_LOOP, 0, 4);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
