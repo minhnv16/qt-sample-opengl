@@ -14,6 +14,7 @@ sudo apt-get install libgl-dev libxrandr-dev libxinerama-dev libxcursor-dev libx
 
 
 #for building glfw
+wget https://github.com/glfw/glfw/archive/refs/tags/3.3.4.tar.gz -O glfw-3.3.4.tar.gz
 sudo apt-get install cmake3 libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev
 
 cmake -DCMAKE_INSTALL_PREFIX:PATH=`pwd`/../out-glfw/ .
@@ -23,6 +24,7 @@ make install
 
 
 #for building glew
+wget https://udomain.dl.sourceforge.net/project/glew/glew/2.2.0/glew-2.2.0.tgz
 cmake -DCMAKE_INSTALL_PREFIX:PATH=`pwd`/../../../out-glew/ .
 make
 make install
