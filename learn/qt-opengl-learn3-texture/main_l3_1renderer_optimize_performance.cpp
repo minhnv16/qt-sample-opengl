@@ -86,34 +86,9 @@ void initVecObject(int nNumberObject){
     }
 }
 
-
-void update_object_to_vertex(const Object & obj){
-    int nStartIndex = obj.nIndexInVertices;
-    for(int i=0; i < obj.vecVertex.size();i++){
-        g_vecVertices[nStartIndex] = obj.vecVertex[i];
-        nStartIndex++;
-    }
-}
-
-void transform_all_object(){
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    double time  = glfwGetTime();
-    for( int i=0;i < g_vecObject.size();i++){
-        Object obj = g_vecObject[i];
-        float a, x, y;
-        get_area_centroid(obj, a, x, y);
-
-        float angle = time * i / 3;
-        rotate_my_obj(obj, x, y, angle);
-        update_object_to_vertex(obj);
-    }    
-
-    glBufferData(GL_ARRAY_BUFFER, g_vecVertices.size()*sizeof(VertexAtt), &g_vecVertices[0], GL_STATIC_DRAW);
-
-}
 void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, int mode) {
 
-    transform_all_object();
+    //transform_all_object();
 
 }
 int main_1renderer_2texture_multi_object_optimize()
@@ -177,42 +152,38 @@ int main_1renderer_2texture_multi_object_optimize()
         layout (location = 1) in vec3 aColor;
         layout (location = 2) in vec2 aTexCoord;
         uniform float aTime;
-        uniform mat4 transform;
         out vec3 ourColor;
         out vec2 TexCoord;
 
+        void rotate_point(float cx, float cy, float angle,inout float x,inout float y)
+        {
+            float s = sin(angle);
+            float c = cos(angle);
+
+            // translate point back to origin:
+            x -= cx;
+            y -= cy;
+
+            // rotate point
+            float xnew = x * c - y * s;
+            float ynew = x * s + y * c;
+
+            // translate point back:
+            x = xnew + cx;
+            y = ynew + cy;
+
+        }
 
         void main()
         {
             vec3 tmpPos = aPos;
             float angle = 0.0f;
-            //if(aColor.x == 3)
-            {
-                angle = aTime * aColor.z / 3;
-            }
+            angle = aTime * aColor.z / 3;
 
-            float s = sin(angle);
-            float c = cos(angle);
+            rotate_point(aColor.x, aColor.y, angle, tmpPos.x, tmpPos.y);
+            rotate_point(0.0f, 0.0f, aTime, tmpPos.x, tmpPos.y);
+            gl_Position = vec4(tmpPos, 1.0);
 
-            //center point for rotate
-            float cx = aColor.x;
-            float cy = aColor.y;
-
-            tmpPos.x -= cx;
-            tmpPos.y -= cy;
-
-            // rotate point
-            float xnew = tmpPos.x * c - tmpPos.y * s;
-            float ynew = tmpPos.x * s + tmpPos.y * c;
-
-            // translate point back:
-            tmpPos.x = xnew + cx;
-            tmpPos.y = ynew + cy;
-
-            gl_Position = transform * vec4(tmpPos, 1.0);
-
-
-            //oPos = aPos;
             ourColor = aColor;
             TexCoord = aTexCoord;
         }
@@ -239,7 +210,6 @@ int main_1renderer_2texture_multi_object_optimize()
         out vec4 FragColor;
 
         in vec2 TexCoord;
-//        in vec3 oPos;
         uniform sampler2D texture0;
         uniform sampler2D texture1;
 
@@ -355,11 +325,6 @@ int main_1renderer_2texture_multi_object_optimize()
     unsigned int aTimeLoc = glGetUniformLocation(shaderProgram, "aTime");
     glUniform1f(aTimeLoc, glfwGetTime());
 
-    unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-    glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-
-
 
     glfwSwapInterval(0);
     double lastTime = glfwGetTime();
@@ -386,10 +351,6 @@ int main_1renderer_2texture_multi_object_optimize()
             nbFrames = 0;
             lastTime = currentTime;
         }
-
-        glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
         unsigned int aTimeLoc = glGetUniformLocation(shaderProgram, "aTime");
         glUniform1f(aTimeLoc, currentTime);

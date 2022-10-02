@@ -172,12 +172,12 @@ int main_1renderer_2texture_multi_object()
         uniform mat4 transform;
         out vec3 ourColor;
         out vec2 TexCoord;
-        out vec3 oPos;
+//        out vec3 oPos;
 
         void main()
         {
             gl_Position = transform * vec4(aPos, 1.0);
-            oPos = aPos;
+            //oPos = aPos;
             ourColor = aColor;
             TexCoord = aTexCoord;
         }
@@ -205,30 +205,15 @@ int main_1renderer_2texture_multi_object()
 
         in vec3 ourColor;
         in vec2 TexCoord;
-        in vec3 oPos;
+        //in vec3 oPos;
         uniform sampler2D texture0;
         uniform sampler2D texture1;
 
         void main()
         {
-            //FragColor = vec4(ourColor, 1.0f);
-            //FragColor = texture(texture1, TexCoord);
-            //FragColor = texture(texture1, TexCoord);
+
             FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.6);
 
-            return;
-
-            if(abs(oPos.x) >= 0.45f
-                || abs(oPos.y) >= 0.45f
-            ){
-                FragColor = vec4(ourColor, 1.0f);
-                //FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-            }
-            else{
-                //FragColor = texture(texture1, TexCoord);
-                FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.2);
-
-            }
         }
 
     )GLSL";
