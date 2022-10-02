@@ -13,7 +13,7 @@
 #include "texturebase.h"
 #include "texturewall.h"
 
-namespace l3_textures_1renderer{
+namespace l3_textures_1renderer_optimize_performance{
 using namespace std;
 
 
@@ -46,15 +46,22 @@ void initVecObject(int nNumberObject){
 
             Object obj;
 
-            VertexAtt pt1(Position(fLeft, fBottom, 0.0f), Color(1.0f, 0.0f, 0.0f), TextureCoord(1.0f, 1.0f));
-            VertexAtt pt2(Position(fRight, fBottom, 0.0f), Color(0.0f, 1.0f, 0.0f), TextureCoord(1.0f, 0.0f));
-            VertexAtt pt3(Position(fRight - 0.2*width, fTop - 0.2*width, 0.0f), Color(0.0f, 0.0f, 1.0f), TextureCoord(0.0f, 0.0f));
-            VertexAtt pt4(Position(fLeft + 0.2*width, fTop - 0.2*width, 0.0f), Color(0.0f, 0.0f, 1.0f), TextureCoord(0.0f, 1.0f));
+            VertexAtt pt1(Position(fLeft, fBottom, 0.0f), Color(0.0f, 0.0f, g_vecObject.size()), TextureCoord(1.0f, 1.0f));
+            VertexAtt pt2(Position(fRight, fBottom, 0.0f), Color(0.0f, 0.0f, g_vecObject.size()), TextureCoord(1.0f, 0.0f));
+            VertexAtt pt3(Position(fRight - 0.2*width, fTop - 0.2*width, 0.0f), Color(0.0f, 0.0f, g_vecObject.size()), TextureCoord(0.0f, 0.0f));
+            VertexAtt pt4(Position(fLeft + 0.2*width, fTop - 0.2*width, 0.0f), Color(0.0f, 0.0f, g_vecObject.size()), TextureCoord(0.0f, 1.0f));
 
             obj.vecVertex.push_back(pt1);
             obj.vecVertex.push_back(pt2);
             obj.vecVertex.push_back(pt3);
             obj.vecVertex.push_back(pt4);
+            float a =0.0f, x=0.0f, y=0.0f;
+            get_area_centroid(obj, a, x, y);
+            for(int ptIndex = 0;ptIndex<obj.vecVertex.size();ptIndex++){
+                obj.vecVertex[ptIndex].color.r = x;
+                obj.vecVertex[ptIndex].color.g = y;
+            }
+
             g_vecObject.push_back(obj);
 
         }
@@ -109,7 +116,7 @@ void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, i
     transform_all_object();
 
 }
-int main_1renderer_2texture_multi_object()
+int main_1renderer_2texture_multi_object_optimize()
 {
     //init data
 
@@ -169,15 +176,43 @@ int main_1renderer_2texture_multi_object()
         layout (location = 0) in vec3 aPos;
         layout (location = 1) in vec3 aColor;
         layout (location = 2) in vec2 aTexCoord;
+        uniform float aTime;
         uniform mat4 transform;
         out vec3 ourColor;
         out vec2 TexCoord;
-        out vec3 oPos;
+
 
         void main()
         {
-            gl_Position = transform * vec4(aPos, 1.0);
-            oPos = aPos;
+            vec3 tmpPos = aPos;
+            float angle = 0.0f;
+            //if(aColor.x == 3)
+            {
+                angle = aTime * aColor.z / 3;
+            }
+
+            float s = sin(angle);
+            float c = cos(angle);
+
+            //center point for rotate
+            float cx = aColor.x;
+            float cy = aColor.y;
+
+            tmpPos.x -= cx;
+            tmpPos.y -= cy;
+
+            // rotate point
+            float xnew = tmpPos.x * c - tmpPos.y * s;
+            float ynew = tmpPos.x * s + tmpPos.y * c;
+
+            // translate point back:
+            tmpPos.x = xnew + cx;
+            tmpPos.y = ynew + cy;
+
+            gl_Position = transform * vec4(tmpPos, 1.0);
+
+
+            //oPos = aPos;
             ourColor = aColor;
             TexCoord = aTexCoord;
         }
@@ -203,32 +238,14 @@ int main_1renderer_2texture_multi_object()
         #version 330 core
         out vec4 FragColor;
 
-        in vec3 ourColor;
         in vec2 TexCoord;
-        in vec3 oPos;
+//        in vec3 oPos;
         uniform sampler2D texture0;
         uniform sampler2D texture1;
 
         void main()
         {
-            //FragColor = vec4(ourColor, 1.0f);
-            //FragColor = texture(texture1, TexCoord);
-            //FragColor = texture(texture1, TexCoord);
             FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.6);
-
-            return;
-
-            if(abs(oPos.x) >= 0.45f
-                || abs(oPos.y) >= 0.45f
-            ){
-                FragColor = vec4(ourColor, 1.0f);
-                //FragColor = vec4(0.0f, 0.0f, 0.0f, 1.0f);
-            }
-            else{
-                //FragColor = texture(texture1, TexCoord);
-                FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.2);
-
-            }
         }
 
     )GLSL";
@@ -335,6 +352,9 @@ int main_1renderer_2texture_multi_object()
     }
     glUseProgram(shaderProgram);
 
+    unsigned int aTimeLoc = glGetUniformLocation(shaderProgram, "aTime");
+    glUniform1f(aTimeLoc, glfwGetTime());
+
     unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
     glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
@@ -371,8 +391,8 @@ int main_1renderer_2texture_multi_object()
         transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
-
-        transform_all_object();
+        unsigned int aTimeLoc = glGetUniformLocation(shaderProgram, "aTime");
+        glUniform1f(aTimeLoc, currentTime);
 
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
