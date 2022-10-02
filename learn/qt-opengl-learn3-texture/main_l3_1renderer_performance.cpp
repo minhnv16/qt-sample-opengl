@@ -222,7 +222,7 @@ void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, i
     transform_all_object();
 
 }
-int main_2texture()
+int main_single_renderer_2texture_multi_object()
 {
     //init data
 
@@ -480,9 +480,9 @@ int main_2texture()
             lastTime = currentTime;
         }
 
-//        glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-//        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-//        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+        glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
 
         transform_all_object();
