@@ -12,57 +12,13 @@
 #include "texturebase.h"
 #include "texturebase.h"
 #include "texturewall.h"
-#include "texturewall.h"
 
 namespace l3_textures_1renderer_performance{
 using namespace std;
 using namespace l3_textures;
 
-struct Position{
-    float x, y, z;
-    Position(float _x, float  _y, float  _z){
-        x=_x,y=_y,z=_z;
-    };
-    Position(){};
-};
-struct Color{
-    float r, g, b;
-    Color(float _r, float _g, float _b){
-        r=_r,g=_g,b=_b;
-    };
-    Color(){};
-};
 
 
-struct TextureCoord{
-    float x, y;
-    TextureCoord(float _x, float  _y){
-        x=_x,y=_y;
-    };
-    TextureCoord(){};
-};
-
-
-struct VertexAtt{
-    Position pos;
-    Color color;
-    TextureCoord texCord;
-    VertexAtt(Position _pos, Color _color, TextureCoord _texCord)
-    {
-        pos = _pos;
-        color = _color;
-        texCord = _texCord;
-    };
-};
-
-struct Object{
-    std::vector<VertexAtt> vecVertex;
-    int nIndexInVertices = 0;
-//    Object(){
-//        pPointerInVertices =NULL;
-//    }
-
-};
 
 unsigned int VAO, VBO, EBO;
 std::vector<Object> g_vecObject;
@@ -209,7 +165,8 @@ void transform_all_object(){
         float a, x, y;
         get_area_centroid(obj, a, x, y);
 
-        float angle = 0.00005*i;//glfwGetTime();
+        double time  = glfwGetTime();
+        float angle = 0.000001 * time * i;
         rotate_my_obj(obj, x, y, angle);
         update_object_to_vertex(obj);
     }    
