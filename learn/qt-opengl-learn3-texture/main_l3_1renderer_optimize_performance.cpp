@@ -23,6 +23,7 @@ unsigned int VAO, VBO, EBO;
 std::vector<Object> g_vecObject;
 std::vector<VertexAtt> g_vecVertices;
 std::vector<int> g_indices;
+unsigned int shaderProgram;
 
 void initVecObject(int nNumberObject){
 
@@ -88,7 +89,16 @@ void initVecObject(int nNumberObject){
 
 void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, int mode) {
 
-    //transform_all_object();
+    int selectedId = 0;
+    if (action == GLFW_PRESS) {
+        selectedId = key;
+    }
+    else{
+        return;
+    }
+    glUseProgram(shaderProgram);
+    unsigned int indexLoc = glGetUniformLocation(shaderProgram, "aIndexSelect");
+    glUniform1i(indexLoc, selectedId);
 
 }
 int main_1renderer_2texture_multi_object_optimize()
@@ -154,6 +164,7 @@ int main_1renderer_2texture_multi_object_optimize()
         uniform float aTime;
         out vec3 ourColor;
         out vec2 TexCoord;
+        out float oIndex;
 
         void rotate_point(float cx, float cy, float angle,inout float x,inout float y)
         {
@@ -186,6 +197,7 @@ int main_1renderer_2texture_multi_object_optimize()
 
             ourColor = aColor;
             TexCoord = aTexCoord;
+            oIndex = aColor.z;
         }
     )GLSL";
     unsigned int vertexShader;
@@ -210,12 +222,18 @@ int main_1renderer_2texture_multi_object_optimize()
         out vec4 FragColor;
 
         in vec2 TexCoord;
+        in float oIndex;
+
         uniform sampler2D texture0;
         uniform sampler2D texture1;
+        uniform int aIndexSelect;
 
         void main()
         {
             FragColor = mix(texture(texture0, TexCoord), texture(texture1, TexCoord), 0.6);
+            if(aIndexSelect == oIndex){
+                FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+            }
         }
 
     )GLSL";
@@ -233,7 +251,6 @@ int main_1renderer_2texture_multi_object_optimize()
 
     }
 
-    unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
@@ -324,6 +341,9 @@ int main_1renderer_2texture_multi_object_optimize()
 
     unsigned int aTimeLoc = glGetUniformLocation(shaderProgram, "aTime");
     glUniform1f(aTimeLoc, glfwGetTime());
+
+    unsigned int indexLoc = glGetUniformLocation(shaderProgram, "aIndexSelect");
+    glUniform1i(indexLoc, -1);
 
 
     glfwSwapInterval(0);
