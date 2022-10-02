@@ -271,7 +271,7 @@ int main_1texture()
 
     glDeleteBuffers(1, &VBO);
     //glDeleteBuffers(1, &EBO);
-    //glDeleteProgram(shaderProgram);
+    glDeleteProgram(shaderProgram);
     glfwTerminate();
     return 0;
 }
@@ -532,8 +532,7 @@ int main_2texture()
 
 
     glDeleteBuffers(1, &VBO);
-    //glDeleteBuffers(1, &EBO);
-    //glDeleteProgram(shaderProgram);
+    glDeleteProgram(shaderProgram);
     glfwTerminate();
     return 0;
 }
@@ -609,7 +608,11 @@ int main_2texture_2shader_wrapper(){
         glfwPollEvents();
 
     }
-
+    glDeleteBuffers(1, &re.VBO);
+    glDeleteProgram(re.m_shaderProgram);
+    glDeleteBuffers(1, &re_wall.VBO);
+    glDeleteProgram(re_wall.m_shaderProgram);
+    glfwTerminate();
     return 0;
 }
 }//namespace l3

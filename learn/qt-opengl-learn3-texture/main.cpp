@@ -5,10 +5,15 @@ namespace l3_textures{
     int main_2texture_2shader_wrapper();
 
 }
-
+namespace l3_textures_1renderer_performance{
+    int main_2texture();
+}
 int main(){
     l3_textures::main_1texture();
     l3_textures::main_2texture();
     l3_textures::main_2texture_2shader_wrapper();
+
+
+    l3_textures_1renderer_performance::main_2texture();
 
 }

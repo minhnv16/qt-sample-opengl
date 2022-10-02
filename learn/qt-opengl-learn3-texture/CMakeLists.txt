@@ -53,6 +53,7 @@ endif (UNIX)
 add_executable(${out_target}
     main.cpp
     main_l3.cpp
+    main_l3_1renderer_performance.cpp
 texturebase.h texturebase.cpp
 texturewall.h texturewall.cpp
 )
