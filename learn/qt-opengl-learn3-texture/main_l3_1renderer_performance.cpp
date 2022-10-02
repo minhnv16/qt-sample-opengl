@@ -160,13 +160,13 @@ void update_object_to_vertex(const Object & obj){
 
 void transform_all_object(){
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    double time  = glfwGetTime();
     for( int i=0;i < g_vecObject.size();i++){
-        Object &obj = g_vecObject[i];
+        Object obj = g_vecObject[i];
         float a, x, y;
         get_area_centroid(obj, a, x, y);
 
-        double time  = glfwGetTime();
-        float angle = 0.000001 * time * i;
+        float angle = time * i / 3;
         rotate_my_obj(obj, x, y, angle);
         update_object_to_vertex(obj);
     }    
