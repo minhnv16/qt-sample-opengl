@@ -12,7 +12,7 @@
 #include "texturebase.h"
 #include "texturewall.h"
 
-namespace l3_textures_1renderer_optimize_performance{
+namespace l3_textures_1renderer_NtextureS_optimize_performance{
 using namespace std;
 
 
@@ -91,23 +91,6 @@ void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, i
     int selectedId = 0;
     if (action == GLFW_PRESS) {
         selectedId = key;
-
-        unsigned int aTimeLoc = glGetUniformLocation(shaderProgram, "aTime");
-        float time = glfwGetTime();
-        if(selectedId<g_vecObject.size() && selectedId>=0){
-            float angle = time * selectedId / 3;
-            Object obj = g_vecObject[selectedId];
-
-            rotate_my_obj(obj, obj.vecVertex[0].color.r, obj.vecVertex[0].color.r, angle);
-            rotate_my_obj(obj, 0.0f, 0.0f, time);
-
-            printf("obj = %.3f, %.3f\n", obj.vecVertex[0].pos.x, obj.vecVertex[0].pos.y);
-        }
-
-
-
-
-
     }
     else{
         return;
@@ -117,7 +100,7 @@ void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, i
     glUniform1i(indexLoc, selectedId);
 
 }
-int main_1renderer_2texture_multi_object_optimize()
+int main_1renderer_NtextureS_multi_object_optimize()
 {
     //init data
 

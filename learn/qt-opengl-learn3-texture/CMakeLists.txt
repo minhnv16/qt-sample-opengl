@@ -55,6 +55,7 @@ add_executable(${out_target}
     main_l3.cpp
     main_l3_1renderer_performance.cpp
     main_l3_1renderer_optimize_performance.cpp
+    main_l3_1renderer_NtextureS_optimize_performance.cpp
 texturebase.h texturebase.cpp
 texturewall.h texturewall.cpp
 common.h common.cpp

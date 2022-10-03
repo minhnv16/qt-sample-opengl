@@ -109,6 +109,17 @@ void key_callback_learn(GLFWwindow* window, int key, int scancode, int action, i
     transform_all_object();
 
 }
+static double lastTime = 0.0f;
+
+void handle_transform_all_object(){
+    double currentTime = glfwGetTime();
+    //if (currentTime - lastTime >= 0.060f)
+    {
+        transform_all_object();
+        lastTime = currentTime;
+    }
+}
+
 int main_1renderer_2texture_multi_object()
 {
     //init data
@@ -357,8 +368,7 @@ int main_1renderer_2texture_multi_object()
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
 
-        transform_all_object();
-
+        handle_transform_all_object();
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
