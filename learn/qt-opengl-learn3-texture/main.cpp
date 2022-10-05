@@ -20,9 +20,9 @@ int main(){
 //    l3_textures::main_2texture_2shader_wrapper();
 
 
-    l3_textures_1renderer::main_1renderer_2texture_multi_object();
-    l3_textures_1renderer_optimize_performance::main_1renderer_2texture_multi_object_optimize();
+    //l3_textures_1renderer::main_1renderer_2texture_multi_object();
+    //l3_textures_1renderer_optimize_performance::main_1renderer_2texture_multi_object_optimize();
 
-    //l3_textures_1renderer_NtextureS_optimize_performance::main_1renderer_NtextureS_multi_object_optimize();
+    l3_textures_1renderer_NtextureS_optimize_performance::main_1renderer_NtextureS_multi_object_optimize();
 
 }
