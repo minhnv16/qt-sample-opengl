@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-set(out_target main_01)
+set(out_target main.exe)
 project(${out_target} LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
